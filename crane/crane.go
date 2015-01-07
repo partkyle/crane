@@ -3,7 +3,6 @@ package crane
 import (
 	"errors"
 	"fmt"
-	"github.com/michaelsauter/crane/print"
 	"io"
 	"os"
 	"os/exec"
@@ -11,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+
+	"github.com/michaelsauter/crane/print"
 )
 
 type StatusError struct {
@@ -84,6 +85,10 @@ func intJoin(intSlice []int, sep string) string {
 }
 
 func executeCommand(name string, args []string) {
+	if isDryRun() {
+		fmt.Printf("\n--> %s %s\n", name, strings.Join(args, " "))
+		return
+	}
 	if isVerbose() {
 		fmt.Printf("\n--> %s %s\n", name, strings.Join(args, " "))
 	}

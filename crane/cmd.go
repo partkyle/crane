@@ -2,14 +2,16 @@ package crane
 
 import (
 	"fmt"
-	"github.com/michaelsauter/crane/print"
-	"github.com/spf13/cobra"
 	"os"
 	"strings"
+
+	"github.com/michaelsauter/crane/print"
+	"github.com/spf13/cobra"
 )
 
 type Options struct {
 	verbose             bool
+	dryrun              bool
 	recreate            bool
 	nocache             bool
 	notrunc             bool
@@ -28,6 +30,10 @@ var options Options
 
 func isVerbose() bool {
 	return options.verbose
+}
+
+func isDryRun() bool {
+	return options.dryrun
 }
 
 // returns a function to be set as a cobra command run, wrapping a command meant to be run according to the config
@@ -215,6 +221,7 @@ See the corresponding docker commands for more information.`,
 	}
 
 	craneCmd.PersistentFlags().BoolVarP(&options.verbose, "verbose", "v", false, "Verbose output")
+	craneCmd.PersistentFlags().BoolVarP(&options.dryrun, "dryrun", "", false, "Output commands only")
 	craneCmd.PersistentFlags().StringVarP(&options.config, "config", "c", "", "Config file to read from")
 	cascadingValuesSuffix := `
 					"all": follow any kind of dependency
